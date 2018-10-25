@@ -135,7 +135,7 @@ public:
 						sku.materialDescription = *pMaterialDescription;
 						sku.materialQuantity = *pMaterialQuantity;
 						sku.materialFamily = *pMaterialFamily;
-						sku.justification = Justification::CHECK_action_of_Function;
+						sku.justification = Justification::CHECK_action_with_or_without_subsequent_CHANGE_TURN_action;
 						map<string, StockKeepingUnit>::iterator got = skuMap.find(*pMaterialNumber);
 						if (got != skuMap.end()) {
 							/* map contains key, so get existing quantity,
@@ -182,7 +182,7 @@ public:
 						sku.materialDescription = *pMaterialDescription;
 						sku.materialQuantity = *pMaterialQuantity;
 						sku.materialFamily = *pMaterialFamily;
-						sku.justification = Justification::CHECK_action_of_Function;
+						sku.justification = Justification::CHANGE_action_with_service_description_containing_a_KIT;
 						map<string, StockKeepingUnit>::iterator got = skuMap.find(*pMaterialNumber);
 						if (got != skuMap.end()) {
 							/* map contains key, so get existing quantity,
