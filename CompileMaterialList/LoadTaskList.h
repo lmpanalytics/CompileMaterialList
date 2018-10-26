@@ -55,6 +55,10 @@ public:
 
 		// Process the task lists
 		tasklist t;
+		
+		// Initiate string search and replace
+		static string subStringToRemove = ";;";
+		static string subStringToReplace = "; ;";
 
 		// **************** BEGIN LOOP OF FILE NAMES ****************
 		for (auto& f : fileNames) {
@@ -94,24 +98,13 @@ public:
 						string result1;
 						regex_replace(back_inserter(result1), line.begin(), line.end(), e1, ";0$2"); // Inserts a 0 at end of line if position is empty (assuming strictly 14 columns in total)
 						line = result1; // overwrite old line with result
+						
+						//Insert space in any empty column to make sure line is parseable
+						// Need to repeat twice for odd oocurances
+						boost::replace_all(line, subStringToRemove, subStringToReplace);
+						boost::replace_all(line, subStringToRemove, subStringToReplace);
 
-						regex e2("(;;;;)([^ ]*)");   // matches words containing ";;;;"
-						string result2;
-						regex_replace(back_inserter(result2), line.begin(), line.end(), e2, "; ; ; ;$2"); // Inserts spaces in any three adjacent empty cells
-						line = result2; // overwrite old line with result
-
-
-						regex e3("(;;;)([^ ]*)");   // matches words containing ";;;"
-						string result3;
-						regex_replace(back_inserter(result3), line.begin(), line.end(), e3, "; ; ;$2"); // Inserts spaces in any two adjacent empty cells
-						line = result3; // overwrite old line with result
-
-						regex e4("(;;)([^ ]*)");   // matches words containing ";;"
-						string result4;
-						regex_replace(back_inserter(result4), line.begin(), line.end(), e4, "; ;$2"); // Inserts space in any single empty cells adjacent to non-empty cells
-						line = result4; // overwrite old line with result
-
-						//cout << "NEW line content is: " << line << endl;
+						//cout << "NEW line content is:" << line << endl;
 
 
 						// Do file parsing
