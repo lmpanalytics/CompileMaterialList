@@ -55,7 +55,7 @@ public:
 
 		// Process the task lists
 		tasklist t;
-		
+
 		// Initiate string search and replace
 		static string subStringToRemove = ";;";
 		static string subStringToReplace = "; ;";
@@ -66,9 +66,8 @@ public:
 			// Only process .csv files
 			if (last == "csv")
 			{
-				//string text_file_name = ("TaskLists/" + f);
-				//string text_file_name = ("C:/Users/SEPALMM/source/repos/CompileMtrlList/x64/Debug/TaskLists/" + f);
-				string text_file_name = ("C:/Users/Yoko/source/repos/CompileMaterialList/x64/Debug/TaskLists/" + f);
+				string text_file_name = ("TaskLists/" + f);
+				//string text_file_name = ("C:/Users/Yoko/source/repos/CompileMaterialList/x64/Debug/TaskLists/" + f);
 				cout << "Processing task list " << f << "..." << endl;
 
 				// ETL:
@@ -98,7 +97,30 @@ public:
 						string result1;
 						regex_replace(back_inserter(result1), line.begin(), line.end(), e1, ";0$2"); // Inserts a 0 at end of line if position is empty (assuming strictly 14 columns in total)
 						line = result1; // overwrite old line with result
-						
+
+						/* *************** BEGIN FIX COLUMN 'TYPE' *************** */
+						// Content in column 'Type' is not used and tricky to parse
+						// Delete all content in column 6 'Type' as so:
+						// Create two substrings
+						// s1: All content from start of string until and including semi colon number 5
+						// Find position of semi colon number 5:
+						smatch m;
+						regex e2("^[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;");
+						regex_search(line, m, e2);
+						//cout << "match s1" << " (" << m[0] << ") " << "at position " << m.position(0) << " has a length of " << m.length(0) << endl;
+
+						// s2: All content counting from end of string (assuming last content is an integer for Quantity) until and including semi colon 8
+						smatch m1;
+						regex e3("[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;[^;]*;\\d+$");
+						regex_search(line, m1, e3);
+						//cout << "match s2" << " (" << m1[0] << ") " << "at position " << m1.position(0) << " has a length of " << m1.length(0) << endl;
+
+						// Join substrings s1 and s2 to form a string representing 14 columns
+						string s1 = line.substr(0,m.length(0));
+						string s2 = line.substr(m1.position(0), m1.length(0));
+						line = s1 + s2;
+						/* *************** END FIX COLUMN 'TYPE' *************** */
+
 						//Insert space in any empty column to make sure line is parseable
 						// Need to repeat twice for odd oocurances
 						boost::replace_all(line, subStringToRemove, subStringToReplace);
@@ -193,9 +215,8 @@ public:
 private:
 	static vector<string> loopDirectory() {
 
-		//path p("TaskLists");
-		//path p("C:/Users/SEPALMM/source/repos/CompileMtrlList/x64/Debug/TaskLists");
-		path p("C:/Users/yoko/source/repos/CompileMaterialList/x64/Debug/TaskLists");
+		path p("TaskLists");
+		//path p("C:/Users/yoko/source/repos/CompileMaterialList/x64/Debug/TaskLists");
 
 		vector<string> v;
 

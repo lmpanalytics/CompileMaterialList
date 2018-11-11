@@ -45,8 +45,8 @@ public:
 		// Extract: see java prgm MaterialMaster
 		// Transform: Delete all ';'. Fill any missing descriptions. Delete header row.
 		// Load material data
-		//string text_file_name = "MaterialList/MaterialMaster.csv";
-		string text_file_name = "C:/Users/Yoko/source/repos/CompileMaterialList/x64/Debug/MaterialList/MaterialMaster.csv";
+		string text_file_name = "MaterialList/MaterialMaster.csv";
+		//string text_file_name = "C:/Users/Yoko/source/repos/CompileMaterialList/x64/Debug/MaterialList/MaterialMaster.csv";
 
 		cout << "Loading material data..." << endl;
 
